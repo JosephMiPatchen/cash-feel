@@ -29,30 +29,39 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
         </div>
         
         {/* Budget Items */}
-        <div className="space-y-2">
+        <div className="space-y-3">
           {/* Spending */}
-          <div className="flex items-center justify-between p-2 rounded-md bg-orange-500/5">
-            <span className="text-sm">Spending</span>
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">${totalSpending.toLocaleString()}</span>
+              <div className="w-2 h-2 rounded-sm bg-orange-500"></div>
+              <span className="text-sm font-medium">Spending</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">${totalSpending.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground w-8 text-right">{spendingPercent.toFixed(0)}%</span>
             </div>
           </div>
 
           {/* Bills */}
-          <div className="flex items-center justify-between p-2 rounded-md bg-blue-500/5">
-            <span className="text-sm">Bills</span>
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">${totalBills.toLocaleString()}</span>
+              <div className="w-2 h-2 rounded-sm bg-blue-500"></div>
+              <span className="text-sm font-medium">Bills</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">${totalBills.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground w-8 text-right">{billsPercent.toFixed(0)}%</span>
             </div>
           </div>
 
           {/* Saving */}
-          <div className="flex items-center justify-between p-2 rounded-md bg-success/5">
-            <span className="text-sm">Saving</span>
+          <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium">${totalSaving.toLocaleString()}</span>
+              <div className="w-2 h-2 rounded-sm bg-success"></div>
+              <span className="text-sm font-medium">Saving</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold">${totalSaving.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground w-8 text-right">{savingPercent.toFixed(0)}%</span>
             </div>
           </div>
