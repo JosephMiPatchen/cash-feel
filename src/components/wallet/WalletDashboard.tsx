@@ -1,5 +1,5 @@
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { WalletBalance } from "./WalletBalance";
 import { BudgetOverview } from "./BudgetOverview";
 import { EnvelopeCard } from "./EnvelopeCard";
@@ -9,9 +9,18 @@ import { BudgetManager } from "@/lib/budget/BudgetManager";
 import { AllocationTypeEnum } from "@/lib/budget/types";
 import { extendBudgetSummary } from "@/lib/budget/ui-types";
 import { useToast } from "@/hooks/use-toast";
+import { useEvmAddress, useIsSignedIn } from "@coinbase/cdp-hooks";
+import { getTokenBalance, formatBalance } from "@/crypto-config";
+
 
 export function WalletDashboard() {
   const { toast } = useToast();
+  const { isSignedIn } = useIsSignedIn();
+  const { evmAddress } = useEvmAddress();
+  const [cryptoBalance, setCryptoBalance] = useState<bigint | undefined>(undefined);
+  const [formattedCryptoBalance, setFormattedCryptoBalance] = useState<string | undefined>(undefined);
+  
+  // Budget manager initialization with sample data
   const [budgetManager] = useState(() => {
     // Initialize with sample data
     const manager = new BudgetManager(5000);
@@ -36,11 +45,37 @@ export function WalletDashboard() {
     return manager;
   });
 
-  const [walletBalance] = useState(2847.50);
+  // Use the crypto balance if available, otherwise use the static value
+  const walletBalance = formattedCryptoBalance ? parseFloat(formattedCryptoBalance) : 2847.50;
+  
   const [budgetSummary, setBudgetSummary] = useState(() => 
     extendBudgetSummary(budgetManager.getBudgetSummary())
   );
   const [isSendMoneyOpen, setIsSendMoneyOpen] = useState(false);
+  
+  // Function to fetch crypto balance
+  const fetchCryptoBalance = useCallback(async () => {
+    if (!evmAddress) return;
+    
+    try {
+      const balance = await getTokenBalance(evmAddress);
+      setCryptoBalance(balance);
+      setFormattedCryptoBalance(formatBalance(balance));
+    } catch (error) {
+      console.error("Error fetching crypto balance:", error);
+    }
+  }, [evmAddress]);
+  
+  // Fetch crypto balance on component mount and when evmAddress changes
+  useEffect(() => {
+    if (isSignedIn && evmAddress) {
+      fetchCryptoBalance();
+      
+      // Refresh balance every 30 seconds
+      const interval = setInterval(fetchCryptoBalance, 30000);
+      return () => clearInterval(interval);
+    }
+  }, [isSignedIn, evmAddress, fetchCryptoBalance]);
 
   const handleSendMoney = (
     allocationName: string, 
@@ -103,7 +138,7 @@ export function WalletDashboard() {
       <div className="max-w-md mx-auto px-4 pt-6 pb-8 space-y-6">
         {/* Wallet Balance */}
         <div className="animate-fade-in">
-          <WalletBalance balance={walletBalance} />
+          <WalletBalance />
         </div>
 
         {/* Action Buttons */}
