@@ -10,7 +10,7 @@ interface EnvelopeCardProps {
 export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
   const percentUsed = (allocation.spent / allocation.amount) * 100;
   const remainingPercent = ((allocation.amount - allocation.spent) / allocation.amount) * 100;
-  const isOverspent = allocation.remaining < 0;
+  const isOverspent = allocation.spent > allocation.amount;
   
   // Determine envelope status color
   let statusColor = "envelope-full";
@@ -39,7 +39,7 @@ export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
         {/* Progress Bar */}
         <div className="space-y-1">
           <Progress 
-            value={isOverspent ? Math.max(percentUsed, 101) : percentUsed} 
+            value={isOverspent ? 150 : percentUsed} 
             className="h-1.5"
           />
           <div className="flex justify-between text-xs text-muted-foreground">
