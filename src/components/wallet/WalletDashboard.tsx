@@ -66,19 +66,6 @@ export function WalletDashboard() {
     });
   };
 
-  const handleAddBudget = () => {
-    toast({
-      title: "Add Envelope",
-      description: "Budget management coming soon!",
-    });
-  };
-
-  const handleManageBudget = () => {
-    toast({
-      title: "Manage Budget",
-      description: "Budget management coming soon!",
-    });
-  };
 
   const handleEnvelopeClick = (allocation: any) => {
     toast({
@@ -113,8 +100,6 @@ export function WalletDashboard() {
           <ActionButtons
             onSendMoney={() => setIsSendMoneyOpen(true)}
             onTapToPay={handleTapToPay}
-            onAddBudget={handleAddBudget}
-            onManageBudget={handleManageBudget}
           />
         </div>
 
