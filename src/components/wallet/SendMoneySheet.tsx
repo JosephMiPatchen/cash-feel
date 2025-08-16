@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
 import type { ExtendedBudgetAllocation } from "@/lib/budget/ui-types";
+import { AllocationTypeEnum } from "@/lib/budget/types";
 
 interface SendMoneySheetProps {
   isOpen: boolean;
@@ -112,7 +113,9 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
                 <SelectValue placeholder="Select an envelope" />
               </SelectTrigger>
               <SelectContent>
-                {allocations.map((allocation) => (
+                {allocations
+                  .filter(allocation => allocation.type === AllocationTypeEnum.EXPENSE)
+                  .map((allocation) => (
                   <SelectItem key={allocation.id} value={allocation.name}>
                     <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
