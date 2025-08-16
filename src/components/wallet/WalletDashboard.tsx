@@ -54,17 +54,12 @@ export function WalletDashboard() {
 
       const prevRemaining = budgetManager.getRemainingAmount(allocationName);
 
-      try {
+      if (allowOverspend && amount > prevRemaining) {
+        console.log('Overspend path: using forceRecordExpense');
+        budgetManager.forceRecordExpense(allocationName, amount, description);
+      } else {
         budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
         console.log('recordExpense completed');
-      } catch (err) {
-        console.warn('recordExpense rejected', err);
-        if (allowOverspend && err instanceof Error && err.message.includes('Insufficient funds')) {
-          console.log('Falling back to forceRecordExpense');
-          budgetManager.forceRecordExpense(allocationName, amount, description);
-        } else {
-          throw err;
-        }
       }
       
       const newSummary = extendBudgetSummary(budgetManager.getBudgetSummary());
