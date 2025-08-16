@@ -49,7 +49,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Spending */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <div className="w-2 h-2 rounded-sm bg-orange-500"></div>
+                  <div className="w-2 h-2 rounded-full bg-orange-500"></div>
                   <span className="text-sm font-medium">Spending</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalSpending.toLocaleString()}</div>
