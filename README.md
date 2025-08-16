@@ -1,73 +1,108 @@
-# Welcome to your Lovable project
+# Cash Feel - Crypto Wallet App
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/a596618d-2e80-464a-a0eb-8911d8542ae1
+Cash Feel is a modern cryptocurrency wallet application that combines intuitive budget management with cryptocurrency functionality. The application provides a user-friendly interface for managing digital assets, tracking expenses, and maintaining financial control through envelope-style budgeting.
 
-## How can I edit this code?
+**Current Status**: Frontend implementation complete. Cryptocurrency integration pending.
 
-There are several ways of editing your application.
+## Features
 
-**Use Lovable**
+### Current Features
+- **Wallet Dashboard**: Clean, intuitive interface showing wallet balance and budget allocations
+- **Budget Management**: Zero-based envelope budgeting system with categories:
+  - Spending (daily expenses)
+  - Bills (recurring payments)
+  - Savings (long-term goals)
+- **Transaction Handling**: Record and track expenses against budget categories
+- **Send Money**: Transfer funds between budget categories with overspend protection
+- **Visual Budget Overview**: Track spending progress with visual indicators
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a596618d-2e80-464a-a0eb-8911d8542ae1) and start prompting.
+### Planned Cryptocurrency Features
+- Cryptocurrency wallet integration
+- Support for multiple cryptocurrencies
+- Secure transaction signing
+- Real-time price tracking
+- QR code generation for receiving payments
+- Transaction history and analytics
 
-Changes made via Lovable will be committed automatically to this repo.
+## Technical Stack
 
-**Use your preferred IDE**
+### Frontend
+- **Framework**: React with TypeScript
+- **UI Components**: shadcn-ui component library
+- **Styling**: Tailwind CSS
+- **Build Tool**: Vite
+- **State Management**: React Query for async state
+- **Routing**: React Router
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+### Development Tools
+- **Package Manager**: npm/bun
+- **Type Checking**: TypeScript
+- **Linting**: ESLint
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## Project Structure
 
-Follow these steps:
+```
+cash-feel/
+├── src/
+│   ├── components/
+│   │   ├── ui/           # Base UI components from shadcn
+│   │   └── wallet/       # Wallet-specific components
+│   ├── crypto-config/    # Future cryptocurrency configuration
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/
+│   │   └── budget/       # Budget management logic
+│   └── pages/            # Application pages
+├── public/               # Static assets
+└── ...config files
+```
+
+## Budget Management System
+
+The application uses a zero-based budgeting approach where:
+- Users allocate their income to specific categories
+- Each category has a set amount and remaining balance
+- Transactions reduce the remaining balance in each category
+- Categories are organized by type: Expenses, Bills, and Savings
+
+## Getting Started
+
+### Prerequisites
+- Node.js 16+ and npm/bun
+
+### Installation
 
 ```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+# Clone the repository
+git clone <REPOSITORY_URL>
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+# Navigate to project directory
+cd cash-feel
 
-# Step 3: Install the necessary dependencies.
-npm i
+# Install dependencies
+npm install
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+## Development Roadmap
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. **Phase 1**: ✅ Frontend implementation and budget management
+2. **Phase 2**: 🔄 Cryptocurrency wallet integration
+   - Implement secure key management
+   - Add blockchain transaction capabilities
+   - Create crypto address generation
+3. **Phase 3**: 🔄 Enhanced features
+   - Multi-currency support
+   - Transaction history and analytics
+   - Mobile-responsive design improvements
 
-**Use GitHub Codespaces**
+## Contributing
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## What technologies are used for this project?
+## License
 
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/a596618d-2e80-464a-a0eb-8911d8542ae1) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+This project is licensed under the MIT License - see the LICENSE file for details.
