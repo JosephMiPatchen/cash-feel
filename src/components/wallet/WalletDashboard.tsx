@@ -46,10 +46,11 @@ export function WalletDashboard() {
     allocationName: string, 
     amount: number, 
     recipient: string, 
-    description: string
+    description: string,
+    allowOverspend: boolean = false
   ) => {
     try {
-      budgetManager.recordExpense(allocationName, amount, description);
+      budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
       setBudgetSummary(extendBudgetSummary(budgetManager.getBudgetSummary()));
       
       toast({

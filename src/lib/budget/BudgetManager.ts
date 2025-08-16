@@ -55,9 +55,10 @@ export class BudgetManager {
    * @param categoryName The name of the budget category
    * @param amount The expense amount
    * @param description Description of the expense
+   * @param allowOverspend Optional flag to allow spending beyond budget limits
    * @returns The ID of the created transaction
    */
-  recordExpense(categoryName: string, amount: number, description: string): string {
+  recordExpense(categoryName: string, amount: number, description: string, allowOverspend: boolean = false): string {
     if (amount <= 0) {
       throw new Error('Expense amount must be greater than zero');
     }
@@ -70,7 +71,7 @@ export class BudgetManager {
 
     const category = this.allocations[categoryIndex];
     
-    if (amount > category.remaining) {
+    if (!allowOverspend && amount > category.remaining) {
       throw new Error(`Insufficient funds in "${categoryName}". Remaining: ${category.remaining}, Expense: ${amount}`);
     }
 

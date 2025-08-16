@@ -13,7 +13,7 @@ import { SpendingAnimationModal } from "./SpendingAnimationModal";
 interface SendMoneySheetProps {
   isOpen: boolean;
   onClose: () => void;
-  onSend: (allocation: string, amount: number, recipient: string, description: string) => void;
+  onSend: (allocation: string, amount: number, recipient: string, description: string, allowOverspend?: boolean) => void;
   allocations: ExtendedBudgetAllocation[];
 }
 
@@ -59,7 +59,7 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
       // Mock delay for transaction processing
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      onSend(selectedAllocation, amountValue, recipient, description || `Payment to ${recipient}`);
+      onSend(selectedAllocation, amountValue, recipient, description || `Payment to ${recipient}`, allowOverspend);
       
       // Show animation modal
       if (selectedEnvelope) {
