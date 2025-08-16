@@ -1,6 +1,4 @@
-
 import { Card } from "@/components/ui/card";
-import { Progress } from "@/components/ui/progress";
 import type { ExtendedBudgetSummary } from "@/lib/budget/ui-types";
 import { AllocationTypeEnum } from "@/lib/budget/types";
 
@@ -13,55 +11,62 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
   const savingAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.SAVING);
   
   const totalSpending = spendingAllocations.reduce((sum, a) => sum + a.amount, 0);
-  const spendingSpent = spendingAllocations.reduce((sum, a) => sum + a.spent, 0);
-  const spendingRemaining = spendingAllocations.reduce((sum, a) => sum + a.remaining, 0);
-  const spentPercentage = totalSpending > 0 ? (spendingSpent / totalSpending) * 100 : 0;
-  
   const totalSaving = savingAllocations.reduce((sum, a) => sum + a.amount, 0);
+  const totalBills = 0; // For now, assuming bills are separate from spending/saving
   
+  const income = budgetSummary.totalIncome;
+  const spendingPercent = income > 0 ? (totalSpending / income) * 100 : 0;
+  const savingPercent = income > 0 ? (totalSaving / income) * 100 : 0;
+  const billsPercent = income > 0 ? (totalBills / income) * 100 : 0;
+  const unallocatedPercent = 100 - spendingPercent - savingPercent - billsPercent;
+
   return (
     <Card className="shadow-transaction">
-      <div className="p-4">
-        <h2 className="text-lg font-semibold mb-3">Monthly Budget</h2>
+      <div className="p-3">
+        <h2 className="text-base font-semibold mb-3">Monthly Budget</h2>
         
-        <div className="space-y-3">
-          {/* Total Remaining */}
-          <div className="text-center py-1">
-            <div className="text-2xl font-bold text-success">
-              ${spendingRemaining.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-            </div>
-            <p className="text-sm text-muted-foreground">Remaining this month</p>
+        {/* Budget Breakdown Bar */}
+        <div className="space-y-2">
+          <div className="flex h-2 rounded-full overflow-hidden bg-muted">
+            <div 
+              className="bg-accent transition-all duration-300" 
+              style={{ width: `${spendingPercent}%` }}
+            />
+            <div 
+              className="bg-primary transition-all duration-300" 
+              style={{ width: `${billsPercent}%` }}
+            />
+            <div 
+              className="bg-success transition-all duration-300" 
+              style={{ width: `${savingPercent}%` }}
+            />
+            <div 
+              className="bg-muted-foreground/20 transition-all duration-300" 
+              style={{ width: `${unallocatedPercent}%` }}
+            />
           </div>
           
-          {/* Progress Bar */}
-          <div className="space-y-2">
-            <Progress value={spentPercentage} className="h-3" />
-            <div className="flex justify-between text-sm text-muted-foreground">
-              <span>Spent: ${spendingSpent.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
-              <span>Total: ${totalSpending.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
+          {/* Legend */}
+          <div className="flex justify-between text-xs">
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-accent"></div>
+              <span className="text-muted-foreground">Spending</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-primary"></div>
+              <span className="text-muted-foreground">Bills</span>
+            </div>
+            <div className="flex items-center gap-1">
+              <div className="w-2 h-2 rounded-full bg-success"></div>
+              <span className="text-muted-foreground">Saving</span>
             </div>
           </div>
           
-          {/* Quick Stats */}
-          <div className="grid grid-cols-3 gap-4 pt-2 border-t border-border/50">
-            <div className="text-center">
-              <div className="text-sm font-semibold">
-                ${budgetSummary.totalIncome.toLocaleString('en-US', { minimumFractionDigits: 0 })}
-              </div>
-              <p className="text-xs text-muted-foreground">Income</p>
-            </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold">
-                ${totalSaving.toLocaleString('en-US', { minimumFractionDigits: 0 })}
-              </div>
-              <p className="text-xs text-muted-foreground">Saving/Investing</p>
-            </div>
-            <div className="text-center">
-              <div className="text-sm font-semibold text-success">
-                {totalSpending > 0 ? (100 - spentPercentage).toFixed(0) : 100}%
-              </div>
-              <p className="text-xs text-muted-foreground">Remaining</p>
-            </div>
+          {/* Income Total */}
+          <div className="text-center pt-1">
+            <span className="text-sm text-muted-foreground">
+              ${income.toLocaleString('en-US', { minimumFractionDigits: 0 })} monthly income
+            </span>
           </div>
         </div>
       </div>
