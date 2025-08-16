@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Progress } from "@/components/ui/progress";
 import type { ExtendedBudgetAllocation } from "@/lib/budget/ui-types";
 
@@ -67,14 +67,22 @@ export function SpendingAnimationModal({
   }, [isOpen, allocation, spentAmount, onClose]);
 
   const remainingPercentage = (animatedRemaining / allocation.amount) * 100;
+  const isOverBudget = animatedRemaining < 0;
+  const overspentAmount = isOverBudget ? Math.abs(animatedRemaining) : 0;
   
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md">
+        <DialogTitle className="sr-only">Spending Animation</DialogTitle>
+        <DialogDescription className="sr-only">
+          Animation showing spending update for {allocation.name}
+        </DialogDescription>
         <div className="text-center space-y-6 p-4">
           <div className="space-y-2">
             <h3 className="text-lg font-semibold">{allocation.name}</h3>
-            <p className="text-muted-foreground">Spending Update</p>
+            <p className={`text-sm ${isOverBudget ? 'text-destructive font-medium' : 'text-muted-foreground'}`}>
+              {isOverBudget ? '⚠️ Budget Exceeded!' : 'Spending Update'}
+            </p>
           </div>
 
           <div className="space-y-4">
@@ -84,24 +92,39 @@ export function SpendingAnimationModal({
                 <span>Spent</span>
                 <span>${animatedSpent.toFixed(2)} / ${allocation.amount.toFixed(2)}</span>
               </div>
-              <Progress value={progressValue} className="h-3" />
+              <Progress 
+                value={Math.min(progressValue, 100)} 
+                className={`h-3 ${isOverBudget ? 'animate-pulse' : ''}`} 
+              />
+              {isOverBudget && (
+                <div className="text-xs text-destructive font-medium">
+                  ${((animatedSpent - allocation.amount) / allocation.amount * 100).toFixed(1)}% over budget
+                </div>
+              )}
             </div>
 
             {/* Remaining Amount with Color Animation */}
             <div className="p-4 rounded-lg border-2 transition-all duration-300"
                  style={{
-                   borderColor: remainingPercentage < 20 ? '#ef4444' : remainingPercentage < 50 ? '#f97316' : '#22c55e',
-                   backgroundColor: remainingPercentage < 20 ? 'rgba(239, 68, 68, 0.1)' : remainingPercentage < 50 ? 'rgba(249, 115, 22, 0.1)' : 'rgba(34, 197, 94, 0.1)'
+                   borderColor: isOverBudget ? '#ef4444' : remainingPercentage < 20 ? '#ef4444' : remainingPercentage < 50 ? '#f97316' : '#22c55e',
+                   backgroundColor: isOverBudget ? 'rgba(239, 68, 68, 0.15)' : remainingPercentage < 20 ? 'rgba(239, 68, 68, 0.1)' : remainingPercentage < 50 ? 'rgba(249, 115, 22, 0.1)' : 'rgba(34, 197, 94, 0.1)'
                  }}>
-              <div className="text-sm text-muted-foreground">Remaining</div>
+              <div className="text-sm text-muted-foreground">
+                {isOverBudget ? 'Over Budget' : 'Remaining'}
+              </div>
               <div 
                 className="text-2xl font-bold transition-colors duration-300"
                 style={{
-                  color: remainingPercentage < 20 ? '#ef4444' : remainingPercentage < 50 ? '#f97316' : '#22c55e'
+                  color: isOverBudget ? '#ef4444' : remainingPercentage < 20 ? '#ef4444' : remainingPercentage < 50 ? '#f97316' : '#22c55e'
                 }}
               >
-                ${animatedRemaining.toFixed(2)}
+                {isOverBudget ? `+$${overspentAmount.toFixed(2)}` : `$${animatedRemaining.toFixed(2)}`}
               </div>
+              {isOverBudget && (
+                <div className="text-xs text-destructive mt-1">
+                  You've exceeded this category's budget
+                </div>
+              )}
             </div>
 
             {/* Category Color Indicator */}

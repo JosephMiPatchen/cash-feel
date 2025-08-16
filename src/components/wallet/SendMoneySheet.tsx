@@ -29,12 +29,14 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
   const selectedEnvelope = allocations.find(a => a.name === selectedAllocation);
   const amountValue = parseFloat(amount) || 0;
   const canAfford = selectedEnvelope ? amountValue <= selectedEnvelope.remaining : false;
+  const willOverspend = selectedEnvelope ? amountValue > selectedEnvelope.remaining : false;
+  const overspendAmount = selectedEnvelope && willOverspend ? amountValue - selectedEnvelope.remaining : 0;
 
   const handleSend = async () => {
-    if (!recipient || !amount || !selectedAllocation || !canAfford) {
+    if (!recipient || !amount || !selectedAllocation) {
       toast({
         title: "Invalid transaction",
-        description: "Please fill all fields and ensure sufficient funds.",
+        description: "Please fill all required fields.",
         variant: "destructive"
       });
       return;
@@ -159,11 +161,16 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
                     <span className="text-success">
                       ✓ After transaction: ${(selectedEnvelope.remaining - amountValue).toFixed(2)}
                     </span>
-                  ) : (
-                    <span className="text-destructive">
-                      ✗ Insufficient funds (need ${ (amountValue - selectedEnvelope.remaining).toFixed(2)} more)
-                    </span>
-                  )}
+                  ) : willOverspend ? (
+                    <div className="space-y-1">
+                      <span className="text-destructive font-medium">
+                        ⚠️ This will exceed your budget by ${overspendAmount.toFixed(2)}
+                      </span>
+                      <span className="text-destructive text-xs block">
+                        Category will be -${Math.abs(selectedEnvelope.remaining - amountValue).toFixed(2)} after transaction
+                      </span>
+                    </div>
+                  ) : null}
                 </div>
               )}
             </div>
@@ -173,11 +180,12 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
           {/* Action Button */}
           <Button 
             onClick={handleSend}
-            disabled={!canAfford || !recipient || !amount || !selectedAllocation || isLoading}
-            className="w-full h-12 text-lg font-semibold"
+            disabled={!recipient || !amount || !selectedAllocation || isLoading}
+            className={`w-full h-12 text-lg font-semibold ${willOverspend ? 'bg-destructive hover:bg-destructive/90' : ''}`}
             size="lg"
+            variant={willOverspend ? "destructive" : "default"}
           >
-            {isLoading ? "Sending..." : `Send $${amountValue.toFixed(2)}`}
+            {isLoading ? "Sending..." : willOverspend ? `⚠️ Overspend $${amountValue.toFixed(2)}` : `Send $${amountValue.toFixed(2)}`}
           </Button>
         </div>
       </SheetContent>
