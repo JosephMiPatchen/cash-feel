@@ -30,8 +30,12 @@ export function SpendingAnimationModal({
 
     // Start animation after a brief delay
     const timer = setTimeout(() => {
-      const newSpent = allocation.spent + spentAmount;
-      const newRemaining = allocation.remaining - spentAmount;
+      // Check if transaction would go over budget
+      const wouldGoOverBudget = spentAmount > allocation.remaining;
+      
+      // For over budget transactions, keep amounts unchanged
+      const newSpent = wouldGoOverBudget ? allocation.spent : allocation.spent + spentAmount;
+      const newRemaining = wouldGoOverBudget ? allocation.remaining : allocation.remaining - spentAmount;
       const newProgress = (newSpent / allocation.amount) * 100;
 
       // Dynamic duration based on transaction size relative to category total
@@ -48,9 +52,9 @@ export function SpendingAnimationModal({
         // Use easing function for smooth animation
         const easedProgress = 1 - Math.pow(1 - progress, 3);
 
-        setAnimatedSpent(allocation.spent + (spentAmount * easedProgress));
-        setAnimatedRemaining(allocation.remaining - (spentAmount * easedProgress));
-        setProgressValue((allocation.spent / allocation.amount) * 100 + ((spentAmount / allocation.amount) * 100 * easedProgress));
+        setAnimatedSpent(allocation.spent + ((newSpent - allocation.spent) * easedProgress));
+        setAnimatedRemaining(allocation.remaining + ((newRemaining - allocation.remaining) * easedProgress));
+        setProgressValue((allocation.spent / allocation.amount) * 100 + (((newSpent - allocation.spent) / allocation.amount) * 100 * easedProgress));
 
         if (currentStep >= steps) {
           clearInterval(animationInterval);
