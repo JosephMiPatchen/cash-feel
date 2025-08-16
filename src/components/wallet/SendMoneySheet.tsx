@@ -56,11 +56,15 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
     setIsLoading(true);
     
     try {
+      console.log('Starting transaction:', { selectedAllocation, amountValue, recipient, allowOverspend });
+      
       // Mock delay for transaction processing
       await new Promise(resolve => setTimeout(resolve, 1000));
       
+      console.log('Calling onSend with params:', { selectedAllocation, amountValue, recipient, description: description || `Payment to ${recipient}`, allowOverspend });
       onSend(selectedAllocation, amountValue, recipient, description || `Payment to ${recipient}`, allowOverspend);
       
+      console.log('onSend completed, showing animation');
       // Show animation modal
       if (selectedEnvelope) {
         setAnimationData({ allocation: selectedEnvelope, amount: amountValue });

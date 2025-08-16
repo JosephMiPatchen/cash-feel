@@ -50,19 +50,29 @@ export function WalletDashboard() {
     allowOverspend: boolean = false
   ) => {
     try {
+      console.log('handleSendMoney called with:', { allocationName, amount, recipient, description, allowOverspend });
+      
       budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
-      setBudgetSummary(extendBudgetSummary(budgetManager.getBudgetSummary()));
+      console.log('recordExpense completed');
+      
+      const newSummary = extendBudgetSummary(budgetManager.getBudgetSummary());
+      console.log('New budget summary:', newSummary);
+      
+      setBudgetSummary(newSummary);
+      console.log('Budget summary state updated');
       
       toast({
         title: "Payment successful!",
         description: `$${amount.toFixed(2)} sent from ${allocationName}`,
       });
     } catch (error) {
+      console.error('Transaction error:', error);
       toast({
         title: "Payment failed",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive"
       });
+      throw error; // Re-throw so the UI can handle it
     }
   };
 
