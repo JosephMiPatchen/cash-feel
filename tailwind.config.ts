@@ -26,7 +26,8 @@ export default {
 				foreground: 'hsl(var(--foreground))',
 				primary: {
 					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					foreground: 'hsl(var(--primary-foreground))',
+					glow: 'hsl(var(--primary-glow))'
 				},
 				secondary: {
 					DEFAULT: 'hsl(var(--secondary))',
@@ -51,6 +52,23 @@ export default {
 				card: {
 					DEFAULT: 'hsl(var(--card))',
 					foreground: 'hsl(var(--card-foreground))'
+				},
+				success: {
+					DEFAULT: 'hsl(var(--success))',
+					foreground: 'hsl(var(--success-foreground))'
+				},
+				warning: {
+					DEFAULT: 'hsl(var(--warning))',
+					foreground: 'hsl(var(--warning-foreground))'
+				},
+				wallet: {
+					balance: 'hsl(var(--wallet-balance))'
+				},
+				envelope: {
+					full: 'hsl(var(--envelope-full))',
+					half: 'hsl(var(--envelope-half))',
+					low: 'hsl(var(--envelope-low))',
+					empty: 'hsl(var(--envelope-empty))'
 				},
 				sidebar: {
 					DEFAULT: 'hsl(var(--sidebar-background))',
@@ -88,7 +106,45 @@ export default {
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'fade-in': 'fade-in 0.3s ease-out',
+				'scale-in': 'scale-in 0.2s ease-out',
+				'slide-up': 'slide-up 0.3s ease-out',
+				'envelope-fill': 'envelope-fill 0.8s ease-out',
+				'money-transfer': 'money-transfer 0.6s ease-out'
+			},
+			keyframes: {
+				'fade-in': {
+					'0%': { opacity: '0', transform: 'translateY(10px)' },
+					'100%': { opacity: '1', transform: 'translateY(0)' }
+				},
+				'scale-in': {
+					'0%': { transform: 'scale(0.95)', opacity: '0' },
+					'100%': { transform: 'scale(1)', opacity: '1' }
+				},
+				'slide-up': {
+					'0%': { transform: 'translateY(100%)' },
+					'100%': { transform: 'translateY(0)' }
+				},
+				'envelope-fill': {
+					'0%': { width: '0%' },
+					'100%': { width: 'var(--fill-width)' }
+				},
+				'money-transfer': {
+					'0%': { transform: 'translateX(0) scale(1)', opacity: '1' },
+					'50%': { transform: 'translateX(20px) scale(0.8)', opacity: '0.7' },
+					'100%': { transform: 'translateX(100px) scale(0.5)', opacity: '0' }
+				}
+			},
+			backgroundImage: {
+				'gradient-wallet': 'var(--gradient-wallet)',
+				'gradient-envelope': 'var(--gradient-envelope)',
+				'gradient-premium': 'var(--gradient-premium)'
+			},
+			boxShadow: {
+				'envelope': 'var(--shadow-envelope)',
+				'wallet': 'var(--shadow-wallet)',
+				'transaction': 'var(--shadow-transaction)'
 			}
 		}
 	},
