@@ -32,10 +32,12 @@ export function SpendingAnimationModal({
     const timer = setTimeout(() => {
       const newSpent = allocation.spent + spentAmount;
       const newRemaining = allocation.remaining - spentAmount;
-      const newProgress = (newSpent / allocation.amount) * 100;
-
-      // Animate the values over 4 seconds
-      const duration = 4000;
+      
+      // Calculate transaction percentage of the category budget
+      const transactionPercentage = (spentAmount / allocation.amount) * 100;
+      
+      // Dynamic duration: 1.5s for small transactions (<10%), 3s for larger ones
+      const duration = transactionPercentage < 10 ? 1500 : 3000;
       const steps = 60; // 60 steps for smooth animation
       const interval = duration / steps;
 
@@ -60,6 +62,7 @@ export function SpendingAnimationModal({
         }
       }, interval);
 
+      // Store interval reference for cleanup
       return () => clearInterval(animationInterval);
     }, 300);
 
