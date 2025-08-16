@@ -54,13 +54,8 @@ export function WalletDashboard() {
 
       const prevRemaining = budgetManager.getRemainingAmount(allocationName);
 
-      if (allowOverspend && amount > prevRemaining) {
-        console.log('Overspend path: using forceRecordExpense');
-        budgetManager.forceRecordExpense(allocationName, amount, description);
-      } else {
-        budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
-        console.log('recordExpense completed');
-      }
+      budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
+      console.log('recordExpense completed');
       
       const newSummary = extendBudgetSummary(budgetManager.getBudgetSummary());
       console.log('New budget summary:', newSummary);
