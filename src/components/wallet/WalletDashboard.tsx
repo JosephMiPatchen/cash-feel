@@ -79,8 +79,9 @@ export function WalletDashboard() {
     });
   };
 
-  // All allocations in one section
-  const allAllocations = budgetSummary.allocations;
+  // Separate allocations by type
+  const spendingAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.EXPENSE);
+  const billsAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.BILLS);
 
   return (
     <div className="min-h-screen bg-background">
@@ -103,43 +104,59 @@ export function WalletDashboard() {
           <BudgetOverview budgetSummary={budgetSummary} />
         </div>
 
-        {/* All Allocations */}
+        {/* Spending Section */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Budget Categories</h2>
+            <h2 className="text-lg font-semibold">Spending</h2>
             <span className="text-sm text-muted-foreground">
-              {allAllocations.length} categories
+              {spendingAllocations.length} categories
             </span>
           </div>
           
-          <div className="space-y-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            {allAllocations.map((allocation, index) => {
-              const bgColor = allocation.type === AllocationTypeEnum.BILLS ? 'bg-blue-500/3' : 
-                             allocation.type === AllocationTypeEnum.SAVING ? 'bg-success/3' : 'bg-orange-500/3';
-              
-              return (
+          <div className="space-y-3 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+            {spendingAllocations.map((allocation, index) => (
+              <div 
+                key={allocation.id}
+                className="animate-fade-in"
+                style={{ animationDelay: `${0.4 + index * 0.1}s` }}
+              >
+                <EnvelopeCard 
+                  allocation={allocation}
+                  onClick={() => handleAllocationClick(allocation)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Bills Section */}
+        {billsAllocations.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Bills</h2>
+              <span className="text-sm text-muted-foreground">
+                {billsAllocations.length} scheduled
+              </span>
+            </div>
+            
+            <div className="space-y-2 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+              {billsAllocations.map((allocation, index) => (
                 <div 
                   key={allocation.id}
-                  className={`animate-fade-in bg-card border border-border/50 rounded-lg p-3 ${bgColor}`}
-                  style={{ animationDelay: `${0.4 + index * 0.1}s` }}
-                  onClick={() => handleAllocationClick(allocation)}
+                  className="animate-fade-in bg-card border border-border/50 rounded-lg p-3 bg-blue-500/3"
+                  style={{ animationDelay: `${0.6 + index * 0.1}s` }}
                 >
                   <div className="flex justify-between items-center">
                     <span className="font-medium">{allocation.name}</span>
-                    <div className="flex items-center gap-2">
-                      <span className="font-semibold">
-                        ${allocation.remaining.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        of ${allocation.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
-                      </span>
-                    </div>
+                    <span className="font-semibold">
+                      ${allocation.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
                   </div>
                 </div>
-              );
-            })}
+              ))}
+            </div>
           </div>
-        </div>
+        )}
       </div>
 
       {/* Send Money Sheet */}
