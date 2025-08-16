@@ -10,6 +10,7 @@ interface EnvelopeCardProps {
 export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
   const percentUsed = (allocation.spent / allocation.amount) * 100;
   const remainingPercent = ((allocation.amount - allocation.spent) / allocation.amount) * 100;
+  const isOverspent = allocation.remaining < 0;
   
   // Determine envelope status color
   let statusColor = "envelope-full";
@@ -19,7 +20,9 @@ export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
 
   return (
     <Card 
-      className="cursor-pointer transition-all duration-200 hover:shadow-envelope hover:scale-[1.02] active:scale-[0.98]"
+      className={`cursor-pointer transition-all duration-200 hover:shadow-envelope hover:scale-[1.02] active:scale-[0.98] ${
+        isOverspent ? 'border-destructive border-2' : ''
+      }`}
       onClick={onClick}
     >
       <div className="p-3">
