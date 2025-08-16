@@ -34,8 +34,9 @@ export function SpendingAnimationModal({
       const newRemaining = allocation.remaining - spentAmount;
       const newProgress = (newSpent / allocation.amount) * 100;
 
-      // Animate the values over 4 seconds
-      const duration = 4000;
+      // Dynamic duration based on transaction size relative to category total
+      const transactionPercentage = (spentAmount / allocation.amount) * 100;
+      const duration = transactionPercentage < 10 ? 1500 : 3000; // 1.5s for <10%, 3s for >=10%
       const steps = 60; // 60 steps for smooth animation
       const interval = duration / steps;
 
