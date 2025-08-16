@@ -40,7 +40,7 @@ export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
         <div className="space-y-1">
           <Progress 
             value={percentUsed} 
-            className="h-1.5"
+            className={`h-1.5 ${isOverspent ? '[&>div]:!bg-destructive' : ''}`}
           />
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>of ${allocation.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
