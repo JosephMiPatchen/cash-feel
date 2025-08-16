@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useToast } from "@/hooks/use-toast";
 import type { ExtendedBudgetAllocation } from "@/lib/budget/ui-types";
@@ -22,6 +23,7 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
   const [selectedAllocation, setSelectedAllocation] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [allowOverspend, setAllowOverspend] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
   const [animationData, setAnimationData] = useState<{ allocation: ExtendedBudgetAllocation; amount: number } | null>(null);
   const { toast } = useToast();
@@ -37,6 +39,15 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
       toast({
         title: "Invalid transaction",
         description: "Please fill all required fields.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (willOverspend && !allowOverspend) {
+      toast({
+        title: "Budget Override Required",
+        description: "Enable 'Allow Overspending' to proceed with this transaction.",
         variant: "destructive"
       });
       return;
@@ -176,16 +187,42 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
             </div>
           )}
 
+          {/* Overspend Override Switch */}
+          {willOverspend && (
+            <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg space-y-3">
+              <div className="flex items-center justify-between">
+                <div className="space-y-1">
+                  <Label htmlFor="allow-overspend" className="text-sm font-medium text-destructive">
+                    Allow Overspending
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Override budget limits for this transaction
+                  </p>
+                </div>
+                <Switch
+                  id="allow-overspend"
+                  checked={allowOverspend}
+                  onCheckedChange={setAllowOverspend}
+                />
+              </div>
+              {allowOverspend && (
+                <div className="text-xs text-destructive font-medium">
+                  ⚠️ Budget override enabled - transaction will exceed category limit
+                </div>
+              )}
+            </div>
+          )}
+
 
           {/* Action Button */}
           <Button 
             onClick={handleSend}
-            disabled={!recipient || !amount || !selectedAllocation || isLoading}
-            className={`w-full h-12 text-lg font-semibold ${willOverspend ? 'bg-destructive hover:bg-destructive/90' : ''}`}
+            disabled={!recipient || !amount || !selectedAllocation || isLoading || (willOverspend && !allowOverspend)}
+            className={`w-full h-12 text-lg font-semibold ${willOverspend && allowOverspend ? 'bg-destructive hover:bg-destructive/90' : ''}`}
             size="lg"
-            variant={willOverspend ? "destructive" : "default"}
+            variant={willOverspend && allowOverspend ? "destructive" : "default"}
           >
-            {isLoading ? "Sending..." : willOverspend ? `⚠️ Overspend $${amountValue.toFixed(2)}` : `Send $${amountValue.toFixed(2)}`}
+            {isLoading ? "Sending..." : willOverspend && allowOverspend ? `⚠️ Overspend $${amountValue.toFixed(2)}` : `Send $${amountValue.toFixed(2)}`}
           </Button>
         </div>
       </SheetContent>
