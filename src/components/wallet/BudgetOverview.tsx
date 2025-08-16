@@ -37,25 +37,43 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
         </div>
         
         <div className="flex items-center gap-6">
-          {/* Budget Categories */}
+          {/* Budget Table */}
           <div className="flex-1">
-            <div className="space-y-3">
+            <div className="grid grid-cols-3 gap-4 text-xs font-medium text-muted-foreground mb-2">
+              <div>Category</div>
+              <div className="text-right">Amount</div>
+              <div className="text-right">%</div>
+            </div>
+            
+            <div className="space-y-2">
               {/* Spending */}
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-orange-500"></div>
-                <span className="text-sm font-medium">Spending</span>
+              <div className="grid grid-cols-3 gap-4 items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-orange-500"></div>
+                  <span className="text-sm font-medium">Spending</span>
+                </div>
+                <div className="text-right text-sm font-semibold">${totalSpending.toLocaleString()}</div>
+                <div className="text-right text-xs text-muted-foreground">{spendingPercent.toFixed(0)}%</div>
               </div>
 
               {/* Bills */}
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                <span className="text-sm font-medium">Bills</span>
+              <div className="grid grid-cols-3 gap-4 items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-blue-500"></div>
+                  <span className="text-sm font-medium">Bills</span>
+                </div>
+                <div className="text-right text-sm font-semibold">${totalBills.toLocaleString()}</div>
+                <div className="text-right text-xs text-muted-foreground">{billsPercent.toFixed(0)}%</div>
               </div>
 
               {/* Saving */}
-              <div className="flex items-center gap-2">
-                <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                <span className="text-sm font-medium">Saving</span>
+              <div className="grid grid-cols-3 gap-4 items-center">
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                  <span className="text-sm font-medium">Saving</span>
+                </div>
+                <div className="text-right text-sm font-semibold">${totalSaving.toLocaleString()}</div>
+                <div className="text-right text-xs text-muted-foreground">{savingPercent.toFixed(0)}%</div>
               </div>
             </div>
           </div>
