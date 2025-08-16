@@ -49,7 +49,6 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Spending */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-orange-500"></div>
                   <span className="text-sm font-medium px-2 py-1 rounded-md bg-orange-50 text-orange-700">Spending</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalSpending.toLocaleString()}</div>
@@ -59,7 +58,6 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Bills */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-blue-500"></div>
                   <span className="text-sm font-medium px-2 py-1 rounded-md bg-blue-50 text-blue-700">Bills</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalBills.toLocaleString()}</div>
@@ -69,7 +67,6 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Saving */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <div className="w-3 h-3 bg-green-500"></div>
                   <span className="text-sm font-medium px-2 py-1 rounded-md bg-green-50 text-green-700">Saving</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalSaving.toLocaleString()}</div>
