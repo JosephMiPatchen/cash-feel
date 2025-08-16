@@ -82,17 +82,17 @@ export function WalletDashboard() {
           <WalletBalance balance={walletBalance} />
         </div>
 
-        {/* Budget Overview */}
-        <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
-          <BudgetOverview budgetSummary={budgetSummary} />
-        </div>
-
         {/* Action Buttons */}
-        <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+        <div className="animate-fade-in" style={{ animationDelay: "0.1s" }}>
           <ActionButtons
             onSendMoney={() => setIsSendMoneyOpen(true)}
             onTapToPay={handleTapToPay}
           />
+        </div>
+
+        {/* Budget Overview */}
+        <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
+          <BudgetOverview budgetSummary={budgetSummary} />
         </div>
 
         {/* Envelopes */}

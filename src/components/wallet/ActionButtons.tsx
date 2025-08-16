@@ -24,6 +24,7 @@ export function ActionButtons({
         onClick={onTapToPay}
         variant="outline"
         className="h-12 border-primary/20 hover:bg-primary/5"
+        disabled
       >
         <Smartphone className="w-4 h-4 mr-2" />
         Tap to Pay
