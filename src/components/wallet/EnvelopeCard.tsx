@@ -26,10 +26,6 @@ export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
         {/* Envelope Header */}
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <div 
-              className="w-3 h-3 rounded-full"
-              style={{ backgroundColor: allocation.color }}
-            />
             <h3 className="font-medium text-sm text-foreground">{allocation.name}</h3>
           </div>
           <span className="font-semibold text-sm">

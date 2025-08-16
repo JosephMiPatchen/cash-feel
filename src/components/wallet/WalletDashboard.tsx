@@ -16,14 +16,16 @@ export function WalletDashboard() {
     // Initialize with sample data
     const manager = new BudgetManager(5000);
     manager.createBudget([
-      { name: "Groceries", amount: 800, type: AllocationTypeEnum.EXPENSE },
-      { name: "Coffee & Dining", amount: 300, type: AllocationTypeEnum.EXPENSE },
-      { name: "Transportation", amount: 400, type: AllocationTypeEnum.EXPENSE },
-      { name: "Entertainment", amount: 200, type: AllocationTypeEnum.EXPENSE },
-      { name: "Emergency Fund", amount: 500, type: AllocationTypeEnum.SAVING },
-      { name: "Rent", amount: 1200, type: AllocationTypeEnum.BILLS },
-      { name: "Utilities", amount: 150, type: AllocationTypeEnum.BILLS },
-      { name: "Phone", amount: 80, type: AllocationTypeEnum.BILLS },
+      { name: "Groceries", amount: 600, type: AllocationTypeEnum.EXPENSE },
+      { name: "Coffee & Dining", amount: 250, type: AllocationTypeEnum.EXPENSE },
+      { name: "Transportation", amount: 300, type: AllocationTypeEnum.EXPENSE },
+      { name: "Entertainment", amount: 150, type: AllocationTypeEnum.EXPENSE },
+      { name: "Emergency Fund", amount: 700, type: AllocationTypeEnum.SAVING },
+      { name: "Rent", amount: 2000, type: AllocationTypeEnum.BILLS },
+      { name: "Utilities", amount: 200, type: AllocationTypeEnum.BILLS },
+      { name: "Phone", amount: 100, type: AllocationTypeEnum.BILLS },
+      { name: "Internet", amount: 100, type: AllocationTypeEnum.BILLS },
+      { name: "Vacation Fund", amount: 600, type: AllocationTypeEnum.SAVING },
     ]);
     
     // Add some sample transactions
