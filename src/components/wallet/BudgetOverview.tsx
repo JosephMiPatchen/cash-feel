@@ -24,17 +24,14 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
       <div className="p-4">
         <div className="flex items-center justify-between mb-3">
           <h2 className="text-base font-semibold">Monthly Budget</h2>
-          <span className="text-sm text-muted-foreground">${income.toLocaleString()}</span>
+          <span className="text-sm text-muted-foreground">${income.toLocaleString()} monthly income</span>
         </div>
         
         {/* Budget Items */}
         <div className="space-y-2">
           {/* Spending */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-accent"></div>
-              <span className="text-sm">Spending</span>
-            </div>
+            <span className="text-sm">Spending</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">${totalSpending.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground w-8 text-right">{spendingPercent.toFixed(0)}%</span>
@@ -43,10 +40,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
 
           {/* Bills */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-primary"></div>
-              <span className="text-sm">Bills</span>
-            </div>
+            <span className="text-sm">Bills</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">${totalBills.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground w-8 text-right">{billsPercent.toFixed(0)}%</span>
@@ -55,10 +49,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
 
           {/* Saving */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-success"></div>
-              <span className="text-sm">Saving</span>
-            </div>
+            <span className="text-sm">Saving</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">${totalSaving.toLocaleString()}</span>
               <span className="text-xs text-muted-foreground w-8 text-right">{savingPercent.toFixed(0)}%</span>
@@ -70,15 +61,15 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
         <div className="mt-3">
           <div className="flex h-1.5 rounded-full overflow-hidden bg-muted">
             <div 
-              className="bg-accent transition-all duration-500" 
+              className="bg-orange-500 transition-all duration-500" 
               style={{ width: `${spendingPercent}%` }}
             />
             <div 
-              className="bg-primary transition-all duration-500" 
+              className="bg-blue-500 transition-all duration-500" 
               style={{ width: `${billsPercent}%` }}
             />
             <div 
-              className="bg-success transition-all duration-500" 
+              className="bg-green-500 transition-all duration-500" 
               style={{ width: `${savingPercent}%` }}
             />
           </div>
