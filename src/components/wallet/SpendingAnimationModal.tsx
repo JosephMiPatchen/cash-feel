@@ -96,7 +96,7 @@ export function SpendingAnimationModal({
                 <span>${animatedSpent.toFixed(2)} / ${allocation.amount.toFixed(2)}</span>
               </div>
               <Progress 
-                value={Math.min(progressValue, 100)} 
+                value={progressValue} 
                 className={`h-3 ${isOverBudget ? 'animate-pulse' : ''}`} 
               />
               {isOverBudget && (
