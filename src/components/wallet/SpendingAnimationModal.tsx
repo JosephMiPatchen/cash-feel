@@ -30,17 +30,12 @@ export function SpendingAnimationModal({
 
     // Start animation after a brief delay
     const timer = setTimeout(() => {
-      // Check if transaction would go over budget
-      const wouldGoOverBudget = spentAmount > allocation.remaining;
-      
-      // For over budget transactions, keep amounts unchanged
-      const newSpent = wouldGoOverBudget ? allocation.spent : allocation.spent + spentAmount;
-      const newRemaining = wouldGoOverBudget ? allocation.remaining : allocation.remaining - spentAmount;
+      const newSpent = allocation.spent + spentAmount;
+      const newRemaining = allocation.remaining - spentAmount;
       const newProgress = (newSpent / allocation.amount) * 100;
 
-      // Dynamic duration based on transaction size relative to category total
-      const transactionPercentage = (spentAmount / allocation.amount) * 100;
-      const duration = transactionPercentage < 10 ? 1500 : 3000; // 1.5s for <10%, 3s for >=10%
+      // Animate the values over 4 seconds
+      const duration = 4000;
       const steps = 60; // 60 steps for smooth animation
       const interval = duration / steps;
 
@@ -52,9 +47,9 @@ export function SpendingAnimationModal({
         // Use easing function for smooth animation
         const easedProgress = 1 - Math.pow(1 - progress, 3);
 
-        setAnimatedSpent(allocation.spent + ((newSpent - allocation.spent) * easedProgress));
-        setAnimatedRemaining(allocation.remaining + ((newRemaining - allocation.remaining) * easedProgress));
-        setProgressValue((allocation.spent / allocation.amount) * 100 + (((newSpent - allocation.spent) / allocation.amount) * 100 * easedProgress));
+        setAnimatedSpent(allocation.spent + (spentAmount * easedProgress));
+        setAnimatedRemaining(allocation.remaining - (spentAmount * easedProgress));
+        setProgressValue((allocation.spent / allocation.amount) * 100 + ((spentAmount / allocation.amount) * 100 * easedProgress));
 
         if (currentStep >= steps) {
           clearInterval(animationInterval);
