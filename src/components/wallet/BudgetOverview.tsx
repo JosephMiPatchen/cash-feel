@@ -9,10 +9,11 @@ interface BudgetOverviewProps {
 export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
   const spendingAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.EXPENSE);
   const savingAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.SAVING);
+  const billsAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.BILLS);
   
   const totalSpending = spendingAllocations.reduce((sum, a) => sum + a.amount, 0);
   const totalSaving = savingAllocations.reduce((sum, a) => sum + a.amount, 0);
-  const totalBills = 0; // For now, assuming bills are separate from spending/saving
+  const totalBills = billsAllocations.reduce((sum, a) => sum + a.amount, 0);
   
   const income = budgetSummary.totalIncome;
   const spendingPercent = income > 0 ? (totalSpending / income) * 100 : 0;

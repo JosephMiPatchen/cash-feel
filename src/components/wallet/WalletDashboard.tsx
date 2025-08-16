@@ -21,6 +21,9 @@ export function WalletDashboard() {
       { name: "Transportation", amount: 400, type: AllocationTypeEnum.EXPENSE },
       { name: "Entertainment", amount: 200, type: AllocationTypeEnum.EXPENSE },
       { name: "Emergency Fund", amount: 500, type: AllocationTypeEnum.SAVING },
+      { name: "Rent", amount: 1200, type: AllocationTypeEnum.BILLS },
+      { name: "Utilities", amount: 150, type: AllocationTypeEnum.BILLS },
+      { name: "Phone", amount: 80, type: AllocationTypeEnum.BILLS },
     ]);
     
     // Add some sample transactions
@@ -76,7 +79,7 @@ export function WalletDashboard() {
 
   // Separate allocations by type
   const spendingAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.EXPENSE);
-  const billsAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.SAVING);
+  const billsAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.BILLS);
 
   return (
     <div className="min-h-screen bg-background">

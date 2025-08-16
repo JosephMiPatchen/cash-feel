@@ -7,7 +7,8 @@
  */
 export const AllocationTypeEnum = {
   SAVING: 'SAVING',
-  EXPENSE: 'EXPENSE'
+  EXPENSE: 'EXPENSE',
+  BILLS: 'BILLS'
 } as const;
 
 export type AllocationTypeEnum = typeof AllocationTypeEnum[keyof typeof AllocationTypeEnum];
