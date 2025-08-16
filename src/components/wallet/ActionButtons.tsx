@@ -14,7 +14,7 @@ export function ActionButtons({
     <div className="grid grid-cols-2 gap-3">
       <Button 
         onClick={onSendMoney}
-        className="h-12 bg-gradient-primary hover:bg-gradient-primary/90 text-white border-0 shadow-wallet"
+        className="h-12 bg-primary hover:bg-primary/90 text-primary-foreground"
       >
         <Send className="w-4 h-4 mr-2" />
         Send Money

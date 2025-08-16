@@ -76,15 +76,7 @@ export function WalletDashboard() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="bg-gradient-wallet text-white p-6 pb-8">
-        <div className="max-w-md mx-auto">
-          <h1 className="text-2xl font-bold mb-2">Financial Wellness Wallet</h1>
-          <p className="text-sm opacity-90">Track your spending with digital envelopes</p>
-        </div>
-      </div>
-
-      <div className="max-w-md mx-auto px-4 -mt-4 pb-8 space-y-6">
+      <div className="max-w-md mx-auto px-4 pt-6 pb-8 space-y-6">
         {/* Wallet Balance */}
         <div className="animate-fade-in">
           <WalletBalance balance={walletBalance} />
