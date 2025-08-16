@@ -105,12 +105,12 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
             />
           </div>
 
-          {/* Envelope Selection */}
+          {/* Spending Category Selection */}
           <div className="space-y-2">
-            <Label>Pay from Envelope</Label>
+            <Label>Spending Category</Label>
             <Select value={selectedAllocation} onValueChange={setSelectedAllocation}>
               <SelectTrigger className="h-12">
-                <SelectValue placeholder="Select an envelope" />
+                <SelectValue placeholder="Select spending category" />
               </SelectTrigger>
               <SelectContent>
                 {allocations
