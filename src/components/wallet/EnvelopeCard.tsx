@@ -39,8 +39,8 @@ export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
         {/* Progress Bar */}
         <div className="space-y-1">
           <Progress 
-            value={isOverspent ? 150 : percentUsed} 
-            className="h-1.5"
+            value={Math.min(percentUsed, 100)} 
+            className={`h-1.5 ${isOverspent ? '[&>*]:!bg-destructive' : ''}`}
           />
           <div className="flex justify-between text-xs text-muted-foreground">
             <span>of ${allocation.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}</span>
