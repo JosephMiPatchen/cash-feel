@@ -74,7 +74,7 @@ export class BudgetManager {
     const category = this.allocations[categoryIndex];
     
     console.log('Budget check:', { allowOverspend, amount, remaining: category.remaining, willOverspend: amount > category.remaining });
-    // Allow overspending: negative remaining is permitted
+    // UPDATED: Allow overspending: negative remaining is permitted (no validation)
 
     // Update remaining amount in the category
     this.allocations[categoryIndex] = {
