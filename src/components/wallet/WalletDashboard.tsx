@@ -51,9 +51,21 @@ export function WalletDashboard() {
   ) => {
     try {
       console.log('handleSendMoney called with:', { allocationName, amount, recipient, description, allowOverspend });
-      
-      budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
-      console.log('recordExpense completed');
+
+      const prevRemaining = budgetManager.getRemainingAmount(allocationName);
+
+      try {
+        budgetManager.recordExpense(allocationName, amount, description, allowOverspend);
+        console.log('recordExpense completed');
+      } catch (err) {
+        console.warn('recordExpense rejected', err);
+        if (allowOverspend && err instanceof Error && err.message.includes('Insufficient funds')) {
+          console.log('Falling back to forceRecordExpense');
+          budgetManager.forceRecordExpense(allocationName, amount, description);
+        } else {
+          throw err;
+        }
+      }
       
       const newSummary = extendBudgetSummary(budgetManager.getBudgetSummary());
       console.log('New budget summary:', newSummary);
@@ -61,9 +73,12 @@ export function WalletDashboard() {
       setBudgetSummary(newSummary);
       console.log('Budget summary state updated');
       
+      const overspendBy = Math.max(0, amount - prevRemaining);
       toast({
         title: "Payment successful!",
-        description: `$${amount.toFixed(2)} sent from ${allocationName}`,
+        description: overspendBy > 0 && allowOverspend 
+          ? `$${amount.toFixed(2)} sent from ${allocationName} (overspent by $${overspendBy.toFixed(2)})`
+          : `$${amount.toFixed(2)} sent from ${allocationName}`,
       });
     } catch (error) {
       console.error('Transaction error:', error);
@@ -72,7 +87,6 @@ export function WalletDashboard() {
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive"
       });
-      throw error; // Re-throw so the UI can handle it
     }
   };
 

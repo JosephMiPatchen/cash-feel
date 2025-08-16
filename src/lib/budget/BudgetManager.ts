@@ -99,6 +99,38 @@ export class BudgetManager {
   }
 
   /**
+   * Force records an expense even if it exceeds remaining (allows negative remaining)
+   */
+  forceRecordExpense(categoryName: string, amount: number, description: string): string {
+    console.log('BudgetManager.forceRecordExpense called with:', { categoryName, amount, description });
+    if (amount <= 0) {
+      throw new Error('Expense amount must be greater than zero');
+    }
+
+    const categoryIndex = this.allocations.findIndex(a => a.name === categoryName);
+    if (categoryIndex === -1) {
+      throw new Error(`Budget category "${categoryName}" not found`);
+    }
+
+    const category = this.allocations[categoryIndex];
+    this.allocations[categoryIndex] = {
+      ...category,
+      remaining: category.remaining - amount
+    };
+
+    const transaction: ExpenseTransaction = {
+      id: uuidv4(),
+      categoryName,
+      amount,
+      description,
+      date: new Date()
+    };
+
+    this.transactions.push(transaction);
+    return transaction.id;
+  }
+
+  /**
    * Gets the remaining amount in a specific budget category
    * @param categoryName The name of the budget category
    * @returns The remaining amount in the category
