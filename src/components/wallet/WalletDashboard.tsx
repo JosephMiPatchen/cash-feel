@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { WalletBalance } from "./WalletBalance";
 import { BudgetOverview } from "./BudgetOverview";
@@ -66,13 +67,16 @@ export function WalletDashboard() {
     });
   };
 
-
-  const handleEnvelopeClick = (allocation: any) => {
+  const handleAllocationClick = (allocation: any) => {
     toast({
       title: allocation.name,
       description: `$${allocation.remaining.toFixed(2)} remaining of $${allocation.amount.toFixed(2)}`,
     });
   };
+
+  // Separate allocations by type
+  const spendingAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.EXPENSE);
+  const billsAllocations = budgetSummary.allocations.filter(a => a.type === AllocationTypeEnum.SAVING);
 
   return (
     <div className="min-h-screen bg-background">
@@ -95,17 +99,17 @@ export function WalletDashboard() {
           <BudgetOverview budgetSummary={budgetSummary} />
         </div>
 
-        {/* Envelopes */}
+        {/* Spending Section */}
         <div className="space-y-3">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold">Your Envelopes</h2>
+            <h2 className="text-lg font-semibold">Spending</h2>
             <span className="text-sm text-muted-foreground">
-              {budgetSummary.allocations.length} active
+              {spendingAllocations.length} categories
             </span>
           </div>
           
           <div className="space-y-3 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-            {budgetSummary.allocations.map((allocation, index) => (
+            {spendingAllocations.map((allocation, index) => (
               <div 
                 key={allocation.id}
                 className="animate-fade-in"
@@ -113,12 +117,41 @@ export function WalletDashboard() {
               >
                 <EnvelopeCard 
                   allocation={allocation}
-                  onClick={() => handleEnvelopeClick(allocation)}
+                  onClick={() => handleAllocationClick(allocation)}
                 />
               </div>
             ))}
           </div>
         </div>
+
+        {/* Bills Section */}
+        {billsAllocations.length > 0 && (
+          <div className="space-y-3">
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Bills</h2>
+              <span className="text-sm text-muted-foreground">
+                {billsAllocations.length} scheduled
+              </span>
+            </div>
+            
+            <div className="space-y-2 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+              {billsAllocations.map((allocation, index) => (
+                <div 
+                  key={allocation.id}
+                  className="animate-fade-in bg-card border border-border/50 rounded-lg p-3"
+                  style={{ animationDelay: `${0.6 + index * 0.1}s` }}
+                >
+                  <div className="flex justify-between items-center">
+                    <span className="font-medium">{allocation.name}</span>
+                    <span className="font-semibold">
+                      ${allocation.amount.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Send Money Sheet */}
