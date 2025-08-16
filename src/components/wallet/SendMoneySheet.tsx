@@ -72,7 +72,7 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
         <SheetHeader className="pb-4">
           <SheetTitle>Send Money</SheetTitle>
           <SheetDescription>
-            Send PYUSD from your budget envelopes
+            Send money to recipients
           </SheetDescription>
         </SheetHeader>
 
@@ -157,17 +157,6 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
             </div>
           )}
 
-          {/* Description */}
-          <div className="space-y-2">
-            <Label htmlFor="description">Description (optional)</Label>
-            <Input
-              id="description"
-              placeholder="What's this payment for?"
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              className="h-12"
-            />
-          </div>
 
           {/* Action Button */}
           <Button 
