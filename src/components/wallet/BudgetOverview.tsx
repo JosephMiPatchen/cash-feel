@@ -49,7 +49,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Spending */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium px-2 py-1 rounded-md bg-orange-50 text-orange-700">Spending</span>
+                  <span className="text-sm font-medium px-2 py-1 rounded-md bg-orange-50">Spending</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalSpending.toLocaleString()}</div>
                 <div className="text-right text-xs text-muted-foreground">{spendingPercent.toFixed(0)}%</div>
@@ -58,7 +58,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Bills */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium px-2 py-1 rounded-md bg-blue-50 text-blue-700">Bills</span>
+                  <span className="text-sm font-medium px-2 py-1 rounded-md bg-blue-50">Bills</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalBills.toLocaleString()}</div>
                 <div className="text-right text-xs text-muted-foreground">{billsPercent.toFixed(0)}%</div>
@@ -67,7 +67,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               {/* Saving */}
               <div className="grid grid-cols-3 gap-4 items-center">
                 <div className="flex items-center gap-2">
-                  <span className="text-sm font-medium px-2 py-1 rounded-md bg-green-50 text-green-700">Saving</span>
+                  <span className="text-sm font-medium px-2 py-1 rounded-md bg-green-50">Saving</span>
                 </div>
                 <div className="text-right text-sm font-semibold">${totalSaving.toLocaleString()}</div>
                 <div className="text-right text-xs text-muted-foreground">{savingPercent.toFixed(0)}%</div>
