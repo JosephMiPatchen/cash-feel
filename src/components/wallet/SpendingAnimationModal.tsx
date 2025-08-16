@@ -34,8 +34,8 @@ export function SpendingAnimationModal({
       const newRemaining = allocation.remaining - spentAmount;
       const newProgress = (newSpent / allocation.amount) * 100;
 
-      // Animate the values over 2 seconds
-      const duration = 2000;
+      // Animate the values over 1 second
+      const duration = 1000;
       const steps = 60; // 60 steps for smooth animation
       const interval = duration / steps;
 
