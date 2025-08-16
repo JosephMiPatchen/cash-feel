@@ -18,55 +18,69 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
   const spendingPercent = income > 0 ? (totalSpending / income) * 100 : 0;
   const savingPercent = income > 0 ? (totalSaving / income) * 100 : 0;
   const billsPercent = income > 0 ? (totalBills / income) * 100 : 0;
-  const unallocatedPercent = 100 - spendingPercent - savingPercent - billsPercent;
 
   return (
     <Card className="shadow-transaction">
-      <div className="p-3">
-        <h2 className="text-base font-semibold mb-3">Monthly Budget</h2>
+      <div className="p-4">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-base font-semibold">Monthly Budget</h2>
+          <span className="text-sm text-muted-foreground">${income.toLocaleString()}</span>
+        </div>
         
-        {/* Budget Breakdown Bar */}
+        {/* Budget Items */}
         <div className="space-y-2">
-          <div className="flex h-2 rounded-full overflow-hidden bg-muted">
+          {/* Spending */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-accent"></div>
+              <span className="text-sm">Spending</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">${totalSpending.toLocaleString()}</span>
+              <span className="text-xs text-muted-foreground w-8 text-right">{spendingPercent.toFixed(0)}%</span>
+            </div>
+          </div>
+
+          {/* Bills */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-primary"></div>
+              <span className="text-sm">Bills</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">${totalBills.toLocaleString()}</span>
+              <span className="text-xs text-muted-foreground w-8 text-right">{billsPercent.toFixed(0)}%</span>
+            </div>
+          </div>
+
+          {/* Saving */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-3 h-3 rounded-full bg-success"></div>
+              <span className="text-sm">Saving</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium">${totalSaving.toLocaleString()}</span>
+              <span className="text-xs text-muted-foreground w-8 text-right">{savingPercent.toFixed(0)}%</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Visual Bar */}
+        <div className="mt-3">
+          <div className="flex h-1.5 rounded-full overflow-hidden bg-muted">
             <div 
-              className="bg-accent transition-all duration-300" 
+              className="bg-accent transition-all duration-500" 
               style={{ width: `${spendingPercent}%` }}
             />
             <div 
-              className="bg-primary transition-all duration-300" 
+              className="bg-primary transition-all duration-500" 
               style={{ width: `${billsPercent}%` }}
             />
             <div 
-              className="bg-success transition-all duration-300" 
+              className="bg-success transition-all duration-500" 
               style={{ width: `${savingPercent}%` }}
             />
-            <div 
-              className="bg-muted-foreground/20 transition-all duration-300" 
-              style={{ width: `${unallocatedPercent}%` }}
-            />
-          </div>
-          
-          {/* Legend */}
-          <div className="flex justify-between text-xs">
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-accent"></div>
-              <span className="text-muted-foreground">Spending</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-primary"></div>
-              <span className="text-muted-foreground">Bills</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <div className="w-2 h-2 rounded-full bg-success"></div>
-              <span className="text-muted-foreground">Saving</span>
-            </div>
-          </div>
-          
-          {/* Income Total */}
-          <div className="text-center pt-1">
-            <span className="text-sm text-muted-foreground">
-              ${income.toLocaleString('en-US', { minimumFractionDigits: 0 })} monthly income
-            </span>
           </div>
         </div>
       </div>
