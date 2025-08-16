@@ -143,7 +143,7 @@ export function WalletDashboard() {
               {billsAllocations.map((allocation, index) => (
                 <div 
                   key={allocation.id}
-                  className="animate-fade-in bg-card border border-border/50 rounded-lg p-3 bg-blue-500/10"
+                  className="animate-fade-in bg-card border border-border/50 rounded-lg p-3 bg-blue-500/3"
                   style={{ animationDelay: `${0.6 + index * 0.1}s` }}
                 >
                   <div className="flex justify-between items-center">
