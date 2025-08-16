@@ -222,7 +222,7 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
             size="lg"
             variant={willOverspend && allowOverspend ? "destructive" : "default"}
           >
-            {isLoading ? "Sending..." : willOverspend && allowOverspend ? `⚠️ Overspend $${amountValue.toFixed(2)}` : `Send $${amountValue.toFixed(2)}`}
+            {isLoading ? "Sending..." : willOverspend && allowOverspend ? `⚠️ Overspend $${overspendAmount.toFixed(2)}` : `Send $${amountValue.toFixed(2)}`}
           </Button>
         </div>
       </SheetContent>
