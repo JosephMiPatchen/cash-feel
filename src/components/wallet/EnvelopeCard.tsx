@@ -21,7 +21,7 @@ export function EnvelopeCard({ allocation, onClick }: EnvelopeCardProps) {
   return (
     <Card 
       className={`cursor-pointer transition-all duration-200 hover:shadow-envelope hover:scale-[1.02] active:scale-[0.98] ${
-        isOverspent ? 'border-destructive border-2 animate-glow' : ''
+        isOverspent ? 'border-destructive border-2' : ''
       }`}
       onClick={onClick}
     >
