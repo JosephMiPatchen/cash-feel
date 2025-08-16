@@ -7,6 +7,7 @@ import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle } from "
 import { useToast } from "@/hooks/use-toast";
 import type { ExtendedBudgetAllocation } from "@/lib/budget/ui-types";
 import { AllocationTypeEnum } from "@/lib/budget/types";
+import { SpendingAnimationModal } from "./SpendingAnimationModal";
 
 interface SendMoneySheetProps {
   isOpen: boolean;
@@ -21,6 +22,8 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
   const [selectedAllocation, setSelectedAllocation] = useState("");
   const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showAnimation, setShowAnimation] = useState(false);
+  const [animationData, setAnimationData] = useState<{ allocation: ExtendedBudgetAllocation; amount: number } | null>(null);
   const { toast } = useToast();
 
   const selectedEnvelope = allocations.find(a => a.name === selectedAllocation);
@@ -44,6 +47,12 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       onSend(selectedAllocation, amountValue, recipient, description || `Payment to ${recipient}`);
+      
+      // Show animation modal
+      if (selectedEnvelope) {
+        setAnimationData({ allocation: selectedEnvelope, amount: amountValue });
+        setShowAnimation(true);
+      }
       
       toast({
         title: "Money sent successfully!",
@@ -172,6 +181,16 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
           </Button>
         </div>
       </SheetContent>
+
+      {/* Spending Animation Modal */}
+      {animationData && (
+        <SpendingAnimationModal
+          isOpen={showAnimation}
+          onClose={() => setShowAnimation(false)}
+          allocation={animationData.allocation}
+          spentAmount={animationData.amount}
+        />
+      )}
     </Sheet>
   );
 }

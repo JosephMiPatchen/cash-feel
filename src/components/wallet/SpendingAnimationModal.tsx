@@ -1,0 +1,120 @@
+import { useState, useEffect } from "react";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Progress } from "@/components/ui/progress";
+import type { ExtendedBudgetAllocation } from "@/lib/budget/ui-types";
+
+interface SpendingAnimationModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  allocation: ExtendedBudgetAllocation;
+  spentAmount: number;
+}
+
+export function SpendingAnimationModal({ 
+  isOpen, 
+  onClose, 
+  allocation, 
+  spentAmount 
+}: SpendingAnimationModalProps) {
+  const [animatedSpent, setAnimatedSpent] = useState(allocation.spent);
+  const [animatedRemaining, setAnimatedRemaining] = useState(allocation.remaining);
+  const [progressValue, setProgressValue] = useState((allocation.spent / allocation.amount) * 100);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    // Reset to initial values
+    setAnimatedSpent(allocation.spent);
+    setAnimatedRemaining(allocation.remaining);
+    setProgressValue((allocation.spent / allocation.amount) * 100);
+
+    // Start animation after a brief delay
+    const timer = setTimeout(() => {
+      const newSpent = allocation.spent + spentAmount;
+      const newRemaining = allocation.remaining - spentAmount;
+      const newProgress = (newSpent / allocation.amount) * 100;
+
+      // Animate the values over 2 seconds
+      const duration = 2000;
+      const steps = 60; // 60 steps for smooth animation
+      const interval = duration / steps;
+
+      let currentStep = 0;
+      const animationInterval = setInterval(() => {
+        currentStep++;
+        const progress = currentStep / steps;
+        
+        // Use easing function for smooth animation
+        const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+        setAnimatedSpent(allocation.spent + (spentAmount * easedProgress));
+        setAnimatedRemaining(allocation.remaining - (spentAmount * easedProgress));
+        setProgressValue((allocation.spent / allocation.amount) * 100 + ((spentAmount / allocation.amount) * 100 * easedProgress));
+
+        if (currentStep >= steps) {
+          clearInterval(animationInterval);
+          // Auto close after animation completes
+          setTimeout(() => {
+            onClose();
+          }, 500);
+        }
+      }, interval);
+
+      return () => clearInterval(animationInterval);
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [isOpen, allocation, spentAmount, onClose]);
+
+  const remainingPercentage = (animatedRemaining / allocation.amount) * 100;
+  
+  return (
+    <Dialog open={isOpen} onOpenChange={onClose}>
+      <DialogContent className="sm:max-w-md">
+        <div className="text-center space-y-6 p-4">
+          <div className="space-y-2">
+            <h3 className="text-lg font-semibold">{allocation.name}</h3>
+            <p className="text-muted-foreground">Spending Update</p>
+          </div>
+
+          <div className="space-y-4">
+            {/* Progress Bar */}
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Spent</span>
+                <span>${animatedSpent.toFixed(2)} / ${allocation.amount.toFixed(2)}</span>
+              </div>
+              <Progress value={progressValue} className="h-3" />
+            </div>
+
+            {/* Remaining Amount with Color Animation */}
+            <div className="p-4 rounded-lg border-2 transition-all duration-300"
+                 style={{
+                   borderColor: remainingPercentage < 20 ? '#ef4444' : remainingPercentage < 50 ? '#f97316' : '#22c55e',
+                   backgroundColor: remainingPercentage < 20 ? 'rgba(239, 68, 68, 0.1)' : remainingPercentage < 50 ? 'rgba(249, 115, 22, 0.1)' : 'rgba(34, 197, 94, 0.1)'
+                 }}>
+              <div className="text-sm text-muted-foreground">Remaining</div>
+              <div 
+                className="text-2xl font-bold transition-colors duration-300"
+                style={{
+                  color: remainingPercentage < 20 ? '#ef4444' : remainingPercentage < 50 ? '#f97316' : '#22c55e'
+                }}
+              >
+                ${animatedRemaining.toFixed(2)}
+              </div>
+            </div>
+
+            {/* Category Color Indicator */}
+            <div className="flex items-center justify-center gap-2">
+              <div 
+                className="w-4 h-4 rounded-full"
+                style={{ backgroundColor: allocation.color }}
+              />
+              <span className="text-sm font-medium">{allocation.name}</span>
+            </div>
+          </div>
+        </div>
+      </DialogContent>
+    </Dialog>
+  );
+}
