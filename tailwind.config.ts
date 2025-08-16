@@ -102,6 +102,14 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'glow': {
+					'0%, 100%': {
+						boxShadow: '0 0 20px rgba(239, 68, 68, 0.2)'
+					},
+					'50%': {
+						boxShadow: '0 0 30px rgba(239, 68, 68, 0.4)'
+					}
 				}
 			},
 			animation: {
@@ -111,7 +119,8 @@ export default {
 				'scale-in': 'scale-in 0.2s ease-out',
 				'slide-up': 'slide-up 0.3s ease-out',
 				'envelope-fill': 'envelope-fill 0.8s ease-out',
-				'money-transfer': 'money-transfer 0.6s ease-out'
+				'money-transfer': 'money-transfer 0.6s ease-out',
+				'glow': 'glow 3s ease-in-out infinite'
 			},
 			keyframes: {
 				'fade-in': {
