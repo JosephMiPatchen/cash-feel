@@ -30,7 +30,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
         {/* Budget Items */}
         <div className="space-y-2">
           {/* Spending */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2 rounded-md bg-orange-500/5">
             <span className="text-sm">Spending</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">${totalSpending.toLocaleString()}</span>
@@ -39,7 +39,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
           </div>
 
           {/* Bills */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2 rounded-md bg-blue-500/5">
             <span className="text-sm">Bills</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">${totalBills.toLocaleString()}</span>
@@ -48,7 +48,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
           </div>
 
           {/* Saving */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between p-2 rounded-md bg-success/5">
             <span className="text-sm">Saving</span>
             <div className="flex items-center gap-2">
               <span className="text-sm font-medium">${totalSaving.toLocaleString()}</span>
@@ -69,7 +69,7 @@ export function BudgetOverview({ budgetSummary }: BudgetOverviewProps) {
               style={{ width: `${billsPercent}%` }}
             />
             <div 
-              className="bg-green-500 transition-all duration-500" 
+              className="bg-success transition-all duration-500" 
               style={{ width: `${savingPercent}%` }}
             />
           </div>
