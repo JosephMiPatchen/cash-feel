@@ -148,11 +148,6 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransac
         setShowAnimation(true);
       }
       
-      toast({
-        title: "Money sent successfully!",
-        description: `$${amountValue.toFixed(2)} sent from ${selectedAllocation}`,
-      });
-      
       // Reset form
       setRecipient("");
       setAmount("");
