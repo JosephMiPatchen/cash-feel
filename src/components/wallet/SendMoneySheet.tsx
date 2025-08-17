@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -31,7 +31,7 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransac
   const [allowOverspend, setAllowOverspend] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
   const [animationData, setAnimationData] = useState<{ allocation: ExtendedBudgetAllocation; amount: number } | null>(null);
-  const [activeTab, setActiveTab] = useState<"budget" | "crypto">("budget");
+  // No longer using tabs for transaction types
   const [transactionHash, setTransactionHash] = useState("");
   const [transactionError, setTransactionError] = useState("");
   const { evmAddress } = useEvmAddress();
@@ -42,6 +42,23 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransac
   const canAfford = selectedEnvelope ? amountValue <= selectedEnvelope.remaining : false;
   const willOverspend = selectedEnvelope ? amountValue > selectedEnvelope.remaining : false;
   const overspendAmount = selectedEnvelope && willOverspend ? amountValue - selectedEnvelope.remaining : 0;
+
+  // Reset form when opened
+  useEffect(() => {
+    if (isOpen) {
+      // Reset all state when the modal is opened
+      setRecipient("");
+      setAmount("");
+      setSelectedAllocation("");
+      setDescription("");
+      setIsLoading(false);
+      setAllowOverspend(false);
+      setShowAnimation(false);
+      setAnimationData(null);
+      setTransactionHash("");
+      setTransactionError("");
+    }
+  }, [isOpen]);
 
   // Handle successful crypto transaction
   const handleTransactionSuccess = (hash: string) => {
@@ -159,14 +176,6 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransac
           <SheetDescription>
             Send money to recipients
           </SheetDescription>
-          
-          {/* Transaction Type Tabs */}
-          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "budget" | "crypto")} className="mt-4">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="budget">Budget Categories</TabsTrigger>
-              <TabsTrigger value="crypto">Crypto (PYUSD)</TabsTrigger>
-            </TabsList>
-          </Tabs>
         </SheetHeader>
 
         <div className="space-y-6">
