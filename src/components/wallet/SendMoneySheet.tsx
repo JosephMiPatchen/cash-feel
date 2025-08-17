@@ -295,25 +295,7 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransac
           )}
 
 
-          {/* Transaction Status */}
-          {transactionHash && (
-            <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg space-y-2 mb-4">
-              <h3 className="font-medium text-green-500">Transaction Sent!</h3>
-              <p className="text-sm">Your transaction has been submitted to the blockchain.</p>
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">Transaction Hash:</span>
-                <a 
-                  href={formatTransaction(transactionHash)} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-blue-500 hover:underline"
-                >
-                  {transactionHash.slice(0, 6)}...{transactionHash.slice(-4)}
-                </a>
-              </div>
-            </div>
-          )}
-          
+          {/* Transaction Status */}          
           {transactionError && (
             <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-2 mb-4">
               <h3 className="font-medium text-red-500">Transaction Failed</h3>

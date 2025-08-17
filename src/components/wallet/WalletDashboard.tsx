@@ -97,14 +97,6 @@ export function WalletDashboard() {
       
       setBudgetSummary(newSummary);
       console.log('Budget summary state updated');
-      
-      const overspendBy = Math.max(0, amount - prevRemaining);
-      toast({
-        title: "Payment successful!",
-        description: overspendBy > 0 && allowOverspend 
-          ? `$${amount.toFixed(2)} sent from ${allocationName} (overspent by $${overspendBy.toFixed(2)})`
-          : `$${amount.toFixed(2)} sent from ${allocationName}`,
-      });
     } catch (error) {
       console.error('Transaction error:', error);
       toast({
