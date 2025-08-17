@@ -9,15 +9,20 @@ import { useToast } from "@/hooks/use-toast";
 import type { ExtendedBudgetAllocation } from "@/lib/budget/ui-types";
 import { AllocationTypeEnum } from "@/lib/budget/types";
 import { SpendingAnimationModal } from "./SpendingAnimationModal";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import Transaction from "./Transaction";
+import { useEvmAddress } from "@coinbase/cdp-hooks";
+import { formatTransaction } from "@/crypto-config";
 
 interface SendMoneySheetProps {
   isOpen: boolean;
   onClose: () => void;
   onSend: (allocation: string, amount: number, recipient: string, description: string, allowOverspend?: boolean) => void;
   allocations: ExtendedBudgetAllocation[];
+  onTransactionSuccess?: () => void;
 }
 
-export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMoneySheetProps) {
+export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransactionSuccess }: SendMoneySheetProps) {
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
   const [selectedAllocation, setSelectedAllocation] = useState("");
@@ -26,6 +31,10 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
   const [allowOverspend, setAllowOverspend] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
   const [animationData, setAnimationData] = useState<{ allocation: ExtendedBudgetAllocation; amount: number } | null>(null);
+  const [activeTab, setActiveTab] = useState<"budget" | "crypto">("budget");
+  const [transactionHash, setTransactionHash] = useState("");
+  const [transactionError, setTransactionError] = useState("");
+  const { evmAddress } = useEvmAddress();
   const { toast } = useToast();
 
   const selectedEnvelope = allocations.find(a => a.name === selectedAllocation);
@@ -33,6 +42,55 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
   const canAfford = selectedEnvelope ? amountValue <= selectedEnvelope.remaining : false;
   const willOverspend = selectedEnvelope ? amountValue > selectedEnvelope.remaining : false;
   const overspendAmount = selectedEnvelope && willOverspend ? amountValue - selectedEnvelope.remaining : 0;
+
+  // Handle successful crypto transaction
+  const handleTransactionSuccess = (hash: string) => {
+    console.log("Transaction successful!", hash);
+    setTransactionHash(hash);
+    setTransactionError("");
+    
+    // Create a toast with a clickable transaction hash link
+    toast({
+      title: "Transaction sent successfully!",
+      description: (
+        <a
+          href={formatTransaction(hash)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-500 hover:underline"
+          onClick={(e) => {
+            e.stopPropagation();
+            window.open(formatTransaction(hash), '_blank');
+          }}
+        >
+          View on Etherscan: {hash.slice(0, 6)}...{hash.slice(-4)}
+        </a>
+      ),
+      duration: 10000, // 10 seconds
+    });
+    
+    // Call the onTransactionSuccess callback if provided
+    if (onTransactionSuccess) {
+      onTransactionSuccess();
+    }
+    
+    // Close the sheet
+    onClose();
+  };
+
+  // Handle crypto transaction error
+  const handleTransactionError = (error: Error) => {
+    console.error("Transaction error:", error);
+    setTransactionHash("");
+    setTransactionError(error.message);
+    
+    toast({
+      title: "Transaction failed",
+      description: error.message,
+      variant: "destructive",
+      duration: 10000,
+    });
+  };
 
   const handleSend = async () => {
     if (!recipient || !amount || !selectedAllocation) {
@@ -96,11 +154,19 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
   return (
     <Sheet open={isOpen} onOpenChange={onClose}>
       <SheetContent side="bottom" className="h-[90vh] rounded-t-xl">
-        <SheetHeader className="pb-4">
+        <SheetHeader>
           <SheetTitle>Send Money</SheetTitle>
           <SheetDescription>
             Send money to recipients
           </SheetDescription>
+          
+          {/* Transaction Type Tabs */}
+          <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as "budget" | "crypto")} className="mt-4">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="budget">Budget Categories</TabsTrigger>
+              <TabsTrigger value="crypto">Crypto (PYUSD)</TabsTrigger>
+            </TabsList>
+          </Tabs>
         </SheetHeader>
 
         <div className="space-y-6">
@@ -218,16 +284,45 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations }: SendMon
           )}
 
 
-          {/* Action Button */}
-          <Button 
-            onClick={handleSend}
-            disabled={!recipient || !amount || !selectedAllocation || isLoading || (willOverspend && !allowOverspend)}
-            className={`w-full h-12 text-lg font-semibold ${willOverspend && allowOverspend ? 'bg-destructive hover:bg-destructive/90' : ''}`}
-            size="lg"
-            variant={willOverspend && allowOverspend ? "destructive" : "default"}
-          >
-            {isLoading ? "Sending..." : willOverspend && allowOverspend ? `⚠️ Overspend $${overspendAmount.toFixed(2)}` : `Send $${amountValue.toFixed(2)}`}
-          </Button>
+          {/* Transaction Status */}
+          {transactionHash && (
+            <div className="p-4 bg-green-500/10 border border-green-500/20 rounded-lg space-y-2 mb-4">
+              <h3 className="font-medium text-green-500">Transaction Sent!</h3>
+              <p className="text-sm">Your transaction has been submitted to the blockchain.</p>
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-muted-foreground">Transaction Hash:</span>
+                <a 
+                  href={formatTransaction(transactionHash)} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="text-blue-500 hover:underline"
+                >
+                  {transactionHash.slice(0, 6)}...{transactionHash.slice(-4)}
+                </a>
+              </div>
+            </div>
+          )}
+          
+          {transactionError && (
+            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-lg space-y-2 mb-4">
+              <h3 className="font-medium text-red-500">Transaction Failed</h3>
+              <p className="text-sm text-muted-foreground">{transactionError}</p>
+            </div>
+          )}
+
+          {/* Transaction Component */}
+          <div className="space-y-3">
+            <Transaction 
+              balance={"100"} 
+              recipient={recipient} 
+              amount={amount}
+              onSuccess={handleTransactionSuccess}
+              onError={handleTransactionError}
+            />
+            <p className="text-xs text-muted-foreground text-center">
+              <span className="text-amber-500">⚠️</span> You need ETH on Sepolia to pay for gas fees
+            </p>
+          </div>
         </div>
       </SheetContent>
 

@@ -215,6 +215,7 @@ export function WalletDashboard() {
         onClose={() => setIsSendMoneyOpen(false)}
         onSend={handleSendMoney}
         allocations={budgetSummary.allocations}
+        onTransactionSuccess={fetchCryptoBalance}
       />
     </div>
   );
