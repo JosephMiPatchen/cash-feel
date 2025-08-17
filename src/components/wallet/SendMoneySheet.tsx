@@ -86,13 +86,15 @@ export function SendMoneySheet({ isOpen, onClose, onSend, allocations, onTransac
       duration: 10000, // 10 seconds
     });
     
-    // Call the onTransactionSuccess callback if provided
+    // Call the onTransactionSuccess callback to refresh the balance
     if (onTransactionSuccess) {
+      console.log("Calling onTransactionSuccess to refresh crypto balance");
       onTransactionSuccess();
     }
     
-    // Close the sheet
-    onClose();
+    // Call handleSend to trigger the same animation logic that was working before
+    console.log("Calling handleSend to trigger animation");
+    handleSend();
   };
 
   // Handle crypto transaction error
